@@ -30,6 +30,7 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  **/
 export const authOptions: NextAuthOptions = {
+  debug: true,
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider<DiscordProfile>({
@@ -57,8 +58,9 @@ export const authOptions: NextAuthOptions = {
 
         // Create the user if they don't exist or update the user if they do
         const newUser = await prisma.user.upsert({
-          where: { discordId: id },
+          where: { discordUserName: username },
           update: {
+            discordId: id,
             discordUserName: username,
             discordDiscriminator: discriminator,
             thumbnail: image_url,
